@@ -2,6 +2,7 @@ package com.project.lms.controllers;
 
 import com.project.lms.entities.dto.ResponseDto;
 import com.project.lms.entities.dto.request.IssueBooksRequestDto;
+import com.project.lms.exceptions.InvalidRequestException;
 import com.project.lms.services.BookIssuedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,15 @@ public class LibraryController {
 
     @PostMapping
     public ResponseEntity<ResponseDto> addRecords(@RequestBody IssueBooksRequestDto issueBooksRequestDto) {
+
+
+        if(issueBooksRequestDto.getEmployeeId() == null) {
+            throw new InvalidRequestException("EmployeeId cannot be null");
+        }
+
         return ResponseEntity.ok(
                 new ResponseDto("200", "Records added successfully",
-                        bookIssuedService.issueBooks(issueBooksRequestDto.getIssuedBookDtoList(), issueBooksRequestDto.getEmployeeId())));
+                        bookIssuedService.issueBooks(issueBooksRequestDto.getIssuedBooks(), issueBooksRequestDto.getEmployeeId())));
     }
 
     @GetMapping
@@ -38,8 +45,13 @@ public class LibraryController {
 
     @PatchMapping
     public ResponseEntity<ResponseDto> updateRecords(@RequestBody IssueBooksRequestDto issueBooksRequestDto) {
+
+        if(issueBooksRequestDto.getEmployeeId() == null) {
+            throw new InvalidRequestException("EmployeeId cannot be null");
+        }
+
         return ResponseEntity.ok(
                 new ResponseDto("200", "Records updated successfully",
-                        bookIssuedService.returnBooks(issueBooksRequestDto.getIssuedBookDtoList(), issueBooksRequestDto.getEmployeeId())));
+                        bookIssuedService.returnBooks(issueBooksRequestDto.getIssuedBooks(), issueBooksRequestDto.getEmployeeId())));
     }
 }

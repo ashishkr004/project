@@ -41,15 +41,13 @@ public class BookIssuedServiceImpl implements BookIssuedService {
         if (employee.isPresent()) {
             if (employee.get().getRole().equalsIgnoreCase(LibraryConstants.LIBRARIAN) ||
                     employee.get().getRole().equalsIgnoreCase(LibraryConstants.ISSUER)) {
-                List<IssuedBook> issuedBookList = convertToIssueBookEntities(issuedBookDtoList, employee.get());
-                List<IssuedBook> issuedBooks = issuedBookRepository.saveAll(issuedBookList);
-                return convertToDto(issuedBooks);
+                return issueBooks(issuedBookDtoList, employee.get());
             }
 
             throw new EmployeeRoleNotSatisfied("Invalid role");
         }
 
-        throw new EmployeeNotFoundException("Invalid user");
+        throw new EmployeeNotFoundException("Employee not found");
 
     }
 
@@ -67,36 +65,16 @@ public class BookIssuedServiceImpl implements BookIssuedService {
 
         Optional<Employee> employee = employeeRepository.findById(employeeId);
 
-        if(employee.get().getRole().equalsIgnoreCase(LibraryConstants.LIBRARIAN)
-                || employee.get().getRole().equalsIgnoreCase(LibraryConstants.RECEIVER)) {
-            List<IssuedBook> issuedBooks = new ArrayList<>();
-
-            for (IssuedBookDto issuedBookDto : issuedBookDtos) {
-                Optional<IssuedBook> issuedBook = issuedBookRepository.findById(issuedBookDto.getId());
-
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-                if (issuedBook.isPresent()) {
-                    if(!issuedBook.get().isReturned()){
-                        issuedBook.get().setReceiver(employee.get());
-                        issuedBook.get().setReturnedDate(timestamp);
-                        issuedBook.get().setReturned(true);
-                        issuedBook.get().setTotalFine(issuedBookDto.getTotalFine());
-                        issuedBook.get().setFinePaid(issuedBookDto.isFinePaid());
-                        issuedBook.get().setComment(issuedBook.get().getComment()
-                                + " " + issuedBookDto.getComment());
-
-                        issuedBooks.add(issuedBook.get());
-                    }
-                }
+        if (employee.isPresent()) {
+            if (employee.get().getRole().equalsIgnoreCase(LibraryConstants.LIBRARIAN)
+                    || employee.get().getRole().equalsIgnoreCase(LibraryConstants.RECEIVER)) {
+                return returnAllBooks(issuedBookDtos, employee.get());
             }
 
-            List<IssuedBook> issuedBooks1 = issuedBookRepository.saveAll(issuedBooks);
-
-            return convertToDto(issuedBooks1);
+            throw new EmployeeRoleNotSatisfied("invalid role of employee");
         }
 
-        throw new EmployeeRoleNotSatisfied("invalid role of employee");
+        throw new EmployeeNotFoundException("Employee not found");
 
     }
 
@@ -142,7 +120,8 @@ public class BookIssuedServiceImpl implements BookIssuedService {
         return studentTypes;
     }
 
-    private List<IssuedBook> convertToIssueBookEntities(List<IssuedBookDto> issuedBookDtoList, Employee employee) {
+
+    private List<IssuedBookDto> issueBooks(List<IssuedBookDto> issuedBookDtoList, Employee employee) {
         List<IssuedBook> issuedBooks = new ArrayList<>();
 
         for (IssuedBookDto issuedBookDto : issuedBookDtoList) {
@@ -161,14 +140,20 @@ public class BookIssuedServiceImpl implements BookIssuedService {
                             .dueDate(issuedBookDto.getDueDate())
                             .issuedDate(timestamp)
                             .totalRent(issuedBookDto.getTotalRent())
+                            .isReturned(false)
                             .build();
+
+                    book.get().setIsIssued(true);
+                    bookRepository.save(book.get());
+
+                    issuedBook = issuedBookRepository.save(issuedBook);
 
                     issuedBooks.add(issuedBook);
                 }
             }
         }
 
-        return issuedBooks;
+        return convertToDto(issuedBooks);
     }
 
     private List<IssuedBookDto> convertToDto(List<IssuedBook> issuedBookList) {
@@ -177,15 +162,52 @@ public class BookIssuedServiceImpl implements BookIssuedService {
         for (IssuedBook issuedBook : issuedBookList) {
             IssuedBookDto issuedBookDto = IssuedBookDto.builder()
                     .bookId(issuedBook.getBook().getId())
+                    .studentId(issuedBook.getStudent().getId())
+                    .issuerId(issuedBook.getIssuer().getId())
                     .comment(issuedBook.getComment())
                     .dueDate(issuedBook.getDueDate())
                     .id(issuedBook.getId())
                     .issuedDate(issuedBook.getIssuedDate())
                     .returnedDate(issuedBook.getReturnedDate())
+                    .isReturned(issuedBook.getIsReturned())
+                    .totalRent(issuedBook.getTotalRent())
                     .build();
 
             issuedBookDtoList.add(issuedBookDto);
         }
         return issuedBookDtoList;
     }
+
+    private List<IssuedBookDto> returnAllBooks(List<IssuedBookDto> issuedBookDtoList, Employee employee) {
+        List<IssuedBook> issuedBooks = new ArrayList<>();
+
+        for (IssuedBookDto issuedBookDto : issuedBookDtoList) {
+            Optional<IssuedBook> issuedBook = issuedBookRepository.findById(issuedBookDto.getId());
+
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+            if (issuedBook.isPresent()) {
+                if (!issuedBook.get().getIsReturned()) {
+                    issuedBook.get().setReceiver(employee);
+                    issuedBook.get().setReturnedDate(timestamp);
+                    issuedBook.get().setIsReturned(true);
+                    issuedBook.get().setTotalFine(issuedBookDto.getTotalFine());
+                    issuedBook.get().setFinePaid(issuedBookDto.getFinePaid());
+                    issuedBook.get().setComment(issuedBook.get().getComment()
+                            + " " + issuedBookDto.getComment());
+
+                    IssuedBook issuedBook1 = issuedBookRepository.save(issuedBook.get());
+
+                    Optional<Book> book = bookRepository.findById(issuedBook.get().getBook().getId());
+                    book.get().setIsIssued(false);
+                    bookRepository.save(book.get());
+
+                    issuedBooks.add(issuedBook1);
+                }
+            }
+        }
+
+        return convertToDto(issuedBooks);
+    }
+
 }

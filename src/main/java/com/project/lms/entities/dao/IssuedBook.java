@@ -51,10 +51,10 @@ public class IssuedBook {
     private Double totalFine;
 
     @Column(name = "is_returned", nullable = false)
-    private boolean isReturned;
+    private Boolean isReturned;
 
     @Column(name = "fine_paid", nullable = false)
-    private boolean finePaid;
+    private Boolean finePaid;
 
     @Column(name = "comment")
     private String comment;

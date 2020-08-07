@@ -13,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IssueBooksRequestDto {
-    List<IssuedBookDto> issuedBookDtoList;
+    List<IssuedBookDto> issuedBooks;
     Long employeeId;
 }

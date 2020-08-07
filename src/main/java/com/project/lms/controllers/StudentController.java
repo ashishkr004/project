@@ -1,7 +1,6 @@
 package com.project.lms.controllers;
 
 import com.project.lms.entities.dto.ResponseDto;
-import com.project.lms.entities.dto.StudentDto;
 import com.project.lms.entities.dto.request.StudentRequestDto;
 import com.project.lms.exceptions.InvalidRequestException;
 import com.project.lms.services.StudentManagement;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @CrossOrigin

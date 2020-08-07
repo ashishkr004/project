@@ -22,7 +22,7 @@ public class IssuedBookDto {
     private Timestamp returnedDate;
     private Double totalRent;
     private Double totalFine;
-    private boolean isReturned;
-    private boolean finePaid;
+    private Boolean isReturned;
+    private Boolean finePaid;
     private String comment;
 }
