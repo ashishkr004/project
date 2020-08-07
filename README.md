@@ -90,7 +90,7 @@ curl --location --request GET 'http://localhost:8080/project/v1.0/employees'
 6. To search students in db
 curl --location --request GET 'http://localhost:8080/project/v1.0/students'
 
-7. update books in library
+7. update books in library 
 curl --location --request PATCH 'http://localhost:8080/project/v1.0/books' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -109,6 +109,33 @@ curl --location --request PATCH 'http://localhost:8080/project/v1.0/books' \
 		"isIssued": false
 	}],
 	"employeeId": 3
+}'
+
+8. update employees curl
+curl --location --request PATCH 'http://localhost:8080/project/v1.0/employees' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"employeesList": [        {
+            "id": 7,
+            "employeeType": "library",
+            "password": "2345",
+            "name": "aka",
+            "address": "motihari",
+            "phoneNumber": 9912345678,
+            "role": "receiver",
+            "isActive": true
+        },
+        {
+            "id": 8,
+            "employeeType": "library",
+            "password": "2345",
+            "name": "aka",
+            "address": "motihari",
+            "phoneNumber": 9912345678,
+            "role": "receiver",
+            "isActive": true
+        }],
+	"employeeId": 1
 }'
 
 
