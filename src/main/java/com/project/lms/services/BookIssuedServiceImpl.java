@@ -63,7 +63,7 @@ public class BookIssuedServiceImpl implements BookIssuedService {
     }
 
     @Override
-    public List<IssuedBookDto> returnBooks(Set<IssuedBookDto> issuedBookDtos, Long employeeId) {
+    public List<IssuedBookDto> returnBooks(List<IssuedBookDto> issuedBookDtos, Long employeeId) {
 
         Optional<Employee> employee = employeeRepository.findById(employeeId);
 

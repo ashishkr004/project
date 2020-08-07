@@ -19,16 +19,20 @@ public class IssuedBook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "book", nullable = false)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="book_id")
     private Book book;
 
-    @Column(name = "student", nullable = false)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="student_id")
     private Student student;
 
-    @Column(name = "issuer", nullable = false)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="issuer_id")
     private Employee issuer;
 
-    @Column(name = "receiver", nullable = false)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="receiver_id")
     private Employee receiver;
 
     @Column(name = "issued_date", nullable = false)
@@ -54,4 +58,7 @@ public class IssuedBook {
 
     @Column(name = "comment")
     private String comment;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
 }

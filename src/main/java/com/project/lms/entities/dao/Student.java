@@ -18,7 +18,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "studentType", nullable = false)
+    @Column(name = "student_type", nullable = false)
     private String studentType;
 
     @Column(name = "password", nullable = false)
@@ -30,7 +30,7 @@ public class Student {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "phoneNumber", nullable = false)
+    @Column(name = "phone_number", nullable = false)
     private Long phoneNumber;
 
     @Column(name = "is_active", nullable = false)

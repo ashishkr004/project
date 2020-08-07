@@ -1,14 +1,12 @@
 package com.project.lms.controllers;
 
-import com.project.lms.entities.dao.Book;
-import com.project.lms.entities.dto.IssuedBookDto;
 import com.project.lms.entities.dto.ResponseDto;
+import com.project.lms.entities.dto.request.IssueBooksRequestDto;
 import com.project.lms.services.BookIssuedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @CrossOrigin
@@ -21,10 +19,10 @@ public class LibraryController {
     private BookIssuedService bookIssuedService;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> addRecords(@RequestBody List<IssuedBookDto> issuedBookDtoList) {
+    public ResponseEntity<ResponseDto> addRecords(@RequestBody IssueBooksRequestDto issueBooksRequestDto) {
         return ResponseEntity.ok(
                 new ResponseDto("200", "Records added successfully",
-                        bookIssuedService.addRecords(issuedBookDtoList)));
+                        bookIssuedService.issueBooks(issueBooksRequestDto.getIssuedBookDtoList(), issueBooksRequestDto.getEmployeeId())));
     }
 
     @GetMapping
@@ -39,10 +37,9 @@ public class LibraryController {
     }
 
     @PatchMapping
-    public ResponseEntity<ResponseDto> updateRecords(@RequestParam(value = "ids", required = false) Set<Long> ids,
-                                                     @RequestParam(value = "books", required = false) Set<Book> books) {
+    public ResponseEntity<ResponseDto> updateRecords(@RequestBody IssueBooksRequestDto issueBooksRequestDto) {
         return ResponseEntity.ok(
                 new ResponseDto("200", "Records updated successfully",
-                        bookIssuedService.updateRecords(ids, books)));
+                        bookIssuedService.returnBooks(issueBooksRequestDto.getIssuedBookDtoList(), issueBooksRequestDto.getEmployeeId())));
     }
 }
