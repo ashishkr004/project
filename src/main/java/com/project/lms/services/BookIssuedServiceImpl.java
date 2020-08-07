@@ -186,7 +186,6 @@ public class BookIssuedServiceImpl implements BookIssuedService {
 
             issuedBookDtoList.add(issuedBookDto);
         }
-
         return issuedBookDtoList;
     }
 }
