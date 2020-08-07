@@ -4,17 +4,27 @@
 3. Student management
 4. Issue and return of books with penalty for late submission.
 
-#Built a system to manage books, employees and students data with ability to add, search and update new books, employees and students.
-#Also, we can issue, track and return books form/to library.
+#### Implemented following things in the project
+# Built the system to manage books, employees and students data with ability to add, search and update new books, employees and students.
+# We can issue, track and return books form/to library
+# Roles are defined for employee so that employees can only do their respective task
+# CRUD APIs for book, employee, student and issued_book table
+# If book is already issued to someone it can't be re-issued until it is not return to library
+# Employee with role 'Admin' has rights to add new employees and students 
+# Employee with roles 'librarian' and 'issuer' can issue books to students
+# Employee with roles 'librarian' and 'receiver' can allow return of books
+# Search Api provides filter on various attribute
+# Exceptions are handled
+# 2-3 rounds of dev testing are done
 
 #Technologies and language used:
-Java 11, Spring-boot, PostgreSql, Swagger.
+Java 11, Spring-boot, PostgreSql, Swagger
 
 #Run maven project by following commands
 
 mvn clean install
 
-mvn run -Dspring.profiles.active=staging -Denv=staging
+mvn spring-boot:run -Dspring.profiles.active=staging -Denv=staging
 
 
 #Run following commands after starting psql server
@@ -204,6 +214,15 @@ curl --location --request PATCH 'http://localhost:8080/project/v1.0/library' \
 	"employeeId": 5
 }'
 
+
+### Missed
+# Junit for testing
+
+## Feature Works
+# We can create multiple micro-service to manage books, employees, student and library independently. Which will communicated each other through rest api calls.
+# Junit and Mockito for testing and jacacoo for test coverage
+# Proper logging of the data
+# logs table to track each transaction in database
 
 
 
