@@ -4,6 +4,12 @@
 3. Student management
 4. Issue and return of books with penalty for late submission.
 
+#Built a system to manage books, employees and students data with ability to add, search and update new books, employees and students.
+#Also, we can issue, track and return books form/to library.
+
+#Technologies and language used:
+Java 11, Spring-boot, PostgreSql, Swagger.
+
 #Run maven project by following commands
 
 mvn clean install
