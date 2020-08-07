@@ -86,3 +86,16 @@ curl --location --request GET 'http://localhost:8080/project/v1.0/books'
 
 5. To search employees in db
 curl --location --request GET 'http://localhost:8080/project/v1.0/employees'
+
+6. To search students in db
+curl --location --request GET 'http://localhost:8080/project/v1.0/students'
+
+7
+
+
+
+
+
+
+
+

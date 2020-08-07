@@ -51,7 +51,7 @@ public class StudentManagementImpl implements StudentManagement {
     }
 
     @Override
-    public Boolean deleteStudents(Set<Long> studentIds, Set<Long> phoneNumbers) {
+    public Boolean updateStudents(Set<Long> studentIds, Set<Long> phoneNumbers) {
 
         List<StudentDto> studentDtoList = searchStudents(studentIds, null, null, phoneNumbers);
 

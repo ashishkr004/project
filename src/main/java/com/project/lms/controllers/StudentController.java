@@ -20,7 +20,7 @@ public class StudentController {
     private StudentManagement studentManagement;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> addBooks(@RequestBody StudentRequestDto studentRequestDto) {
+    public ResponseEntity<ResponseDto> addStudents(@RequestBody StudentRequestDto studentRequestDto) {
 
         if(studentRequestDto.getEmployeeId() == null) {
             throw new InvalidRequestException("EmployeeId cannot be null");
@@ -32,7 +32,7 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDto> readMetadata(@RequestParam(value = "ids", required = false) Set<Long> studentIds,
+    public ResponseEntity<ResponseDto> searchStudents(@RequestParam(value = "ids", required = false) Set<Long> studentIds,
                                                     @RequestParam(value = "studentTypes", required = false) Set<String> studentTypes,
                                                     @RequestParam(value = "names", required = false) Set<String> names,
                                                     @RequestParam(value = "phoneNumbers", required = false) Set<Long> phoneNumbers) {
@@ -42,10 +42,10 @@ public class StudentController {
     }
 
     @PatchMapping
-    public ResponseEntity<ResponseDto> deleteMetadata(@RequestParam(value = "ids", required = false) Set<Long> ids,
+    public ResponseEntity<ResponseDto> updateStudents(@RequestParam(value = "ids", required = false) Set<Long> ids,
                                                       @RequestParam(value = "phoneNumbers", required = false) Set<Long> phoneNumbers) {
         return ResponseEntity.ok(
                 new ResponseDto("200", "Books deleted successfully",
-                        studentManagement.deleteStudents(ids, phoneNumbers)));
+                        studentManagement.updateStudents(ids, phoneNumbers)));
     }
 }

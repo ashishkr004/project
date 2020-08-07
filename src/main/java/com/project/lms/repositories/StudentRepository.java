@@ -12,9 +12,9 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query(
             value = "SELECT * FROM student WHERE " +
                     " (-1000 IN (:ids) OR id IN (:ids)) AND " +
-                    " ('null' IN (:studentTypes) OR studentType IN (:studentTypes)) AND " +
+                    " ('null' IN (:studentTypes) OR student_type IN (:studentTypes)) AND " +
                     " ('null' IN (:names) OR name IN (:names)) AND " +
-                    " (-1000 IN (:phoneNumbers) OR phoneNumber IN (:phoneNumbers)) AND " +
+                    " (-1000 IN (:phoneNumbers) OR phone_number IN (:phoneNumbers)) AND " +
                     " is_active = true",
             nativeQuery = true
     )
