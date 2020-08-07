@@ -1,6 +1,6 @@
 package com.project.lms.controllers;
 
-import com.project.lms.entities.dto.ResponseDto;
+import com.project.lms.entities.dto.response.ResponseDto;
 import com.project.lms.entities.dto.request.StudentRequestDto;
 import com.project.lms.exceptions.InvalidRequestException;
 import com.project.lms.services.StudentManagement;

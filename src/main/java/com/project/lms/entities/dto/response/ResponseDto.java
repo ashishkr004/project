@@ -1,4 +1,4 @@
-package com.project.lms.entities.dto;
+package com.project.lms.entities.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
