@@ -90,7 +90,26 @@ curl --location --request GET 'http://localhost:8080/project/v1.0/employees'
 6. To search students in db
 curl --location --request GET 'http://localhost:8080/project/v1.0/students'
 
-7
+7. update books in library
+curl --location --request PATCH 'http://localhost:8080/project/v1.0/books' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"booksList": [{
+		"id": 2,
+		"title": "The Fault In Our Stars",
+		"subject": "Novel",
+		"author": "John Green",
+		"isIssued": false
+	},
+	{
+		"id": 1,
+		"title": "My Experiments With Truth",
+		"subject": "Novel",
+		"author": "Mahatma Gani",
+		"isIssued": false
+	}],
+	"employeeId": 3
+}'
 
 
 
