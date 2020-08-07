@@ -19,7 +19,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                     " ('null' IN (:subjects) OR subject IN (:subjects)) AND " +
                     " ('null' IN (:authors) OR author IN (:authors)) AND " +
                     " (false IN (:isIssued) OR is_issued IN (:isIssued)) AND " +
-                    " active = true",
+                    " is_active = true",
             nativeQuery = true
     )
     List<Book> searchBooks(@Param("ids") Set<Long> ids, @Param("titles") Set<String> titles,

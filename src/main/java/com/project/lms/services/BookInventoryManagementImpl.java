@@ -52,7 +52,7 @@ public class BookInventoryManagementImpl implements BookInventoryManagement {
     }
 
     @Override
-    public Boolean deleteBooks(Set<Long> ids) {
+    public Boolean updateBooks(Set<Long> ids) {
         List<BookDto> bookDtoList = searchBooks(ids, null, null, null, null);
 
         List<Book> books = convertToListOfBook(bookDtoList);

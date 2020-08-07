@@ -16,7 +16,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                     " ('null' IN (:employeeTypes) OR employeeType IN (:employeeTypes)) AND " +
                     " ('null' IN (:names) OR name IN (:names)) AND " +
                     " (-1000 IN (:phoneNumbers) OR phoneNumber IN (:phoneNumbers)) AND " +
-                    " active = true",
+                    " is_active = true",
             nativeQuery = true
     )
     List<Employee> searchEmployee(@Param("ids") Set<Long> ids, @Param("employeeTypes") Set<String> employeeTypes,

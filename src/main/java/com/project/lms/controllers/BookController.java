@@ -34,7 +34,7 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDto> readMetadata(@RequestParam(value = "ids", required = false) Set<Long> ids,
+    public ResponseEntity<ResponseDto> searchBooks(@RequestParam(value = "ids", required = false) Set<Long> ids,
                                                     @RequestParam(value = "titles", required = false) Set<String> titles,
                                                     @RequestParam(value = "subjects", required = false) Set<String> subjects,
                                                     @RequestParam(value = "authors", required = false) Set<String> authors,
@@ -45,9 +45,9 @@ public class BookController {
     }
 
     @PatchMapping
-    public ResponseEntity<ResponseDto> deleteMetadata(@RequestParam(value = "ids", required = false) Set<Long> ids) {
+    public ResponseEntity<ResponseDto> updateBooks(@RequestParam(value = "ids", required = false) Set<Long> ids) {
         return ResponseEntity.ok(
                 new ResponseDto("200", "Books deleted successfully",
-                        bookInventoryManagement.deleteBooks(ids)));
+                        bookInventoryManagement.updateBooks(ids)));
     }
 }

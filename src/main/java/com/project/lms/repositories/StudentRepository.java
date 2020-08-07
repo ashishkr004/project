@@ -15,7 +15,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
                     " ('null' IN (:studentTypes) OR studentType IN (:studentTypes)) AND " +
                     " ('null' IN (:names) OR name IN (:names)) AND " +
                     " (-1000 IN (:phoneNumbers) OR phoneNumber IN (:phoneNumbers)) AND " +
-                    " active = true",
+                    " is_active = true",
             nativeQuery = true
     )
     List<Student> searchEmployee(@Param("ids") Set<Long> ids, @Param("studentTypes") Set<String> studentTypes,

@@ -42,11 +42,11 @@ curl --location --request POST 'http://localhost:8080/project/v1.0/books' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 	"booksList": [{
-		"title": "My Experiments With Truth",
+		"title": "The fault in our Stars",
 		"subject": "Novel",
-		"author": "Mahatma Gandhi"
+		"author": "John Green"
 	}],
-	"employeeId": 1
+	"employeeId": 5
 }'
 
 2. To add new employee
@@ -80,3 +80,8 @@ curl --location --request POST 'http://localhost:8080/project/v1.0/students' \
 	}],
 	"employeeId": 1
 }'
+
+4. To search books in library
+curl --location --request GET 'http://localhost:8080/project/v1.0/books'
+
+5.
