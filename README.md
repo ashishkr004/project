@@ -1,11 +1,20 @@
-# project
+# project aims to build following features
 1. Books Inventory management
 2. Employee management
 3. Student management
 4. Issue and return of books with penalty for late submission.
 
+#Run maven project by following commands
+
+mvn clean install
+
+mvn run -Dspring.profiles.active=staging -Denv=staging
+
 
 #Run following commands after starting psql server
+
+#Run psql server
+brew services start postgresql
 
 #create database
 CREATE DATABASE library;
