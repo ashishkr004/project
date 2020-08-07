@@ -15,4 +15,5 @@ public class BookDto {
     private String subject;
     private String author;
     private Boolean isIssued;
+    private Boolean isActive;
 }

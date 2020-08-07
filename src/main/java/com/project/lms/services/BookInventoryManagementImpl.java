@@ -97,7 +97,8 @@ public class BookInventoryManagementImpl implements BookInventoryManagement {
                     .author(bookDto.getAuthor())
                     .subject(bookDto.getSubject())
                     .title(bookDto.getTitle())
-                    .isIssued(bookDto.getIsIssued())
+                    .isIssued(false)
+                    .isActive(bookDto.getIsActive() == null ? true : bookDto.getIsActive())
                     .build();
 
             bookList.add(book);

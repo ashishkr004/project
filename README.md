@@ -20,7 +20,7 @@ brew services start postgresql
 CREATE DATABASE library;
 
 #create table book
-CREATE TABLE book(id INT PRIMARY KEY NOT NULL, title CHAR(100) NOT NULL, subject CHAR(100) NOT NULL, author CHAR(100) NOT NULL, is_issued BOOLEAN DEFAULT FALSE, is_active BOOLEAN DEFAULT TRUE);
+CREATE TABLE book(id SERIAL PRIMARY KEY, title VARCHAR(255) NOT NULL, subject VARCHAR(100) NOT NULL, author VARCHAR(100) NOT NULL, is_issued BOOLEAN NOT NULL, is_active BOOLEAN NOT NULL);
 
 #create table employee
 CREATE TABLE employee(id INT PRIMARY KEY NOT NULL, employee_type VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL, name VARCHAR(100) NOT NULL, address TEXT NOT NULL, phone_number bigint NOT NULL, role VARCHAR(100) NOT NULL, is_active BOOLEAN DEFAULT TRUE);
