@@ -42,10 +42,13 @@ public class StudentController {
     }
 
     @PatchMapping
-    public ResponseEntity<ResponseDto> updateStudents(@RequestParam(value = "ids", required = false) Set<Long> ids,
-                                                      @RequestParam(value = "phoneNumbers", required = false) Set<Long> phoneNumbers) {
+    public ResponseEntity<ResponseDto> updateStudents(@RequestBody StudentRequestDto studentRequestDto) {
+
+        if (studentRequestDto.getEmployeeId() == null) {
+            throw new InvalidRequestException("EmployeeId cannot be null");
+        }
         return ResponseEntity.ok(
                 new ResponseDto("200", "Books deleted successfully",
-                        studentManagement.updateStudents(ids, phoneNumbers)));
+                        studentManagement.updateStudents(studentRequestDto.getStudentsList(), studentRequestDto.getEmployeeId())));
     }
 }

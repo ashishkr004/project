@@ -10,5 +10,5 @@ public interface StudentManagement {
 
     List<StudentDto> searchStudents(Set<Long> studentIds, Set<String> studentTypes, Set<String> names, Set<Long> phoneNumbers);
 
-    Boolean updateStudents(Set<Long> studentIds, Set<Long> phoneNumbers);
+    List<StudentDto> updateStudents(List<StudentDto> studentDtoList, Long employeeId);
 }

@@ -3,6 +3,7 @@ package com.project.lms.services;
 import com.project.lms.constants.LibraryConstants;
 import com.project.lms.entities.dao.Employee;
 import com.project.lms.entities.dao.Student;
+import com.project.lms.entities.dto.EmployeeDto;
 import com.project.lms.entities.dto.StudentDto;
 import com.project.lms.exceptions.EmployeeNotAddedException;
 import com.project.lms.exceptions.EmployeeRoleNotSatisfied;
@@ -51,19 +52,30 @@ public class StudentManagementImpl implements StudentManagement {
     }
 
     @Override
-    public Boolean updateStudents(Set<Long> studentIds, Set<Long> phoneNumbers) {
+    public List<StudentDto> updateStudents(List<StudentDto> studentDtoList, Long employeeId) {
 
-        List<StudentDto> studentDtoList = searchStudents(studentIds, null, null, phoneNumbers);
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
 
-        List<Student> studentList = convertToListOfStudents(studentDtoList);
+        if (employee.isPresent() && employee.get().getRole().equalsIgnoreCase(LibraryConstants.ADMIN)) {
 
-        for (Student student : studentList) {
-            student.setIsActive(false);
+            Set<Long> ids = new HashSet<>();
+
+            HashMap<Long, StudentDto> studentDtoHashMap = new HashMap<>();
+
+            for (StudentDto studentDto : studentDtoList) {
+                ids.add(studentDto.getId());
+                studentDtoHashMap.put(studentDto.getId(), studentDto);
+            }
+
+            List<Student> students = studentRepository.findAllById(ids);
+            students = updateFetchedEmployees(students, studentDtoHashMap);
+
+            List<Student> updatedStudents = studentRepository.saveAll(students);
+
+            return convertToListOfStudentDto(updatedStudents);
         }
 
-        studentRepository.saveAll(studentList);
-
-        return true;
+        throw new EmployeeRoleNotSatisfied("Not an valid employee");
     }
 
 
@@ -128,11 +140,27 @@ public class StudentManagementImpl implements StudentManagement {
                     .name(student.getName())
                     .password(student.getPassword())
                     .phoneNumber(student.getPhoneNumber())
+                    .isActive(student.getIsActive())
                     .build();
 
             studentDtoList.add(studentDto);
         }
 
         return studentDtoList;
+    }
+
+    private List<Student> updateFetchedEmployees(List<Student> students, HashMap<Long, StudentDto> studentDtoHashMap) {
+        for (Student student : students) {
+            StudentDto studentDto = studentDtoHashMap.get(student.getId());
+
+            student.setAddress(studentDto.getAddress() == null ? student.getAddress() : studentDto.getAddress());
+            student.setIsActive(studentDto.getIsActive() == null ? student.getIsActive() : studentDto.getIsActive());
+            student.setStudentType(studentDto.getStudentType() == null ? student.getStudentType() : studentDto.getStudentType());
+            student.setName(studentDto.getName() == null ? student.getName() : studentDto.getName());
+            student.setPassword(studentDto.getPassword() == null ? student.getPassword() : studentDto.getPassword());
+            student.setPhoneNumber(studentDto.getPhoneNumber() == null ? student.getPhoneNumber() : studentDto.getPhoneNumber());
+        }
+
+        return students;
     }
 }

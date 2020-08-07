@@ -1,9 +1,7 @@
 package com.project.lms.services;
 
 import com.project.lms.constants.LibraryConstants;
-import com.project.lms.entities.dao.Book;
 import com.project.lms.entities.dao.Employee;
-import com.project.lms.entities.dto.BookDto;
 import com.project.lms.entities.dto.EmployeeDto;
 import com.project.lms.exceptions.EmployeeNotAddedException;
 import com.project.lms.exceptions.EmployeeRoleNotSatisfied;
