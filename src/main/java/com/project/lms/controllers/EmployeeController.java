@@ -18,7 +18,7 @@ public class EmployeeController {
     private EmployeeManagement employeeManagement;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> addBooks(@RequestBody EmployeesRequestDto employeesRequestDto) {
+    public ResponseEntity<ResponseDto> addEmployees(@RequestBody EmployeesRequestDto employeesRequestDto) {
 
         if(employeesRequestDto.getEmployeeId() == null) {
             throw new InvalidRequestException("EmployeeId cannot be null");
@@ -30,7 +30,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDto> readMetadata(@RequestParam(value = "ids", required = false) Set<Long> employeeIds,
+    public ResponseEntity<ResponseDto> searchEmployees(@RequestParam(value = "ids", required = false) Set<Long> employeeIds,
                                                     @RequestParam(value = "employeeTypes", required = false) Set<String> employeeTypes,
                                                     @RequestParam(value = "names", required = false) Set<String> names,
                                                     @RequestParam(value = "phoneNumbers", required = false) Set<Long> phoneNumbers) {
@@ -40,7 +40,7 @@ public class EmployeeController {
     }
 
     @PatchMapping
-    public ResponseEntity<ResponseDto> deleteMetadata(@RequestParam(value = "ids", required = false) Set<Long> employeeIds,
+    public ResponseEntity<ResponseDto> updateEmployees(@RequestParam(value = "ids", required = false) Set<Long> employeeIds,
                                                       @RequestParam(value = "phoneNumbers", required = false) Set<Long> phoneNumbers) {
         return ResponseEntity.ok(
                 new ResponseDto("200", "Employees deleted successfully",

@@ -84,4 +84,5 @@ curl --location --request POST 'http://localhost:8080/project/v1.0/students' \
 4. To search books in library
 curl --location --request GET 'http://localhost:8080/project/v1.0/books'
 
-5.
+5. To search employees in db
+curl --location --request GET 'http://localhost:8080/project/v1.0/employees'

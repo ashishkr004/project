@@ -13,9 +13,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query(
             value = "SELECT * FROM employee WHERE " +
                     " (-1000 IN (:ids) OR id IN (:ids)) AND " +
-                    " ('null' IN (:employeeTypes) OR employeeType IN (:employeeTypes)) AND " +
+                    " ('null' IN (:employeeTypes) OR employee_type IN (:employeeTypes)) AND " +
                     " ('null' IN (:names) OR name IN (:names)) AND " +
-                    " (-1000 IN (:phoneNumbers) OR phoneNumber IN (:phoneNumbers)) AND " +
+                    " (-1000 IN (:phoneNumbers) OR phone_number IN (:phoneNumbers)) AND " +
                     " is_active = true",
             nativeQuery = true
     )
