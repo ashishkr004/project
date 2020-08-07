@@ -26,7 +26,7 @@ CREATE TABLE book(id SERIAL PRIMARY KEY, title VARCHAR(255) NOT NULL, subject VA
 CREATE TABLE employee(id INT PRIMARY KEY NOT NULL, employee_type VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL, name VARCHAR(100) NOT NULL, address TEXT NOT NULL, phone_number bigint NOT NULL, role VARCHAR(100) NOT NULL, is_active BOOLEAN DEFAULT TRUE);
 
 #insert admin in employee table
-INSERT INTO employee (employee_type, password, name, address, phone_number, role, is_active) VALUES ('admin', '12345', 'ram', 'blr', 9123456789, 'admin', true);
+INSERT INTO employee(employee_type, password, name, address, phone_number, role, is_active) VALUES ('admin', '12345', 'ram', 'blr', 9123456789, 'admin', true);
 
 #create table student
 CREATE TABLE student(id SERIAL PRIMARY KEY, student_type VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL, name VARCHAR(100) NOT NULL, address TEXT NOT NULL, phone_number bigint NOT NULL, is_active BOOLEAN NOT NULL);
@@ -34,3 +34,49 @@ CREATE TABLE student(id SERIAL PRIMARY KEY, student_type VARCHAR(100) NOT NULL, 
 #create table issued_book
 CREATE TABLE issued_book(id INT PRIMARY KEY NOT NULL, book_id INT NOT NULL, student_id INT NOT NULL, issuer_id INT NOT NULL, receiver_id INT, issued_date timestamp NOT NULL, due_date timestamp NOT NULL, date_returned timestamp, total_rent real NOT NULL, total_fine real, is_returned BOOLEAN DEFAULT FALSE, fine_paid real, comment VARCHAR(255), is_active BOOLEAN DEFAULT TRUE, 
 CONSTRAINT fk_issued_book FOREIGN KEY(book_id) REFERENCES book(id), FOREIGN KEY(student_id) REFERENCES student(id), FOREIGN KEY(issuer_id) REFERENCES employee(id), FOREIGN KEY(receiver_id) REFERENCES employee(id));
+
+
+#These are some important curls:
+1. To add new book
+curl --location --request POST 'http://localhost:8080/project/v1.0/books' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"booksList": [{
+		"title": "My Experiments With Truth",
+		"subject": "Novel",
+		"author": "Mahatma Gandhi"
+	}],
+	"employeeId": 1
+}'
+
+2. To add new employee
+curl --location --request POST 'http://localhost:8080/project/v1.0/employees' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"employeesList": [{
+		"employeeType": "permanent",
+		"password": "2345",
+		"name": "aka",
+	  	"address": "motihari",
+		"phoneNumber": "9912345679",
+		"role": "receiver",
+	  	"isActive": true
+	}],
+	"employeeId": 1
+}'
+
+3. To add new student
+curl --location --request POST 'http://localhost:8080/project/v1.0/students' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"studentsList": [{
+		"studentType": "permanent",
+		"password": "2345",
+		"name": "aka",
+	  	"address": "motihari",
+		"phoneNumber": "9912345679",
+		"role": "receiver",
+	  	"isActive": true
+	}],
+	"employeeId": 1
+}'
