@@ -164,6 +164,40 @@ curl --location --request PATCH 'http://localhost:8080/project/v1.0/students' \
 	"employeeId": 1
 }'
 
+10. curl to issue books
+curl --location --request POST 'http://localhost:8080/project/v1.0/library' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"issuedBooks": [{
+		"bookId": 1,
+		"studentId": 1,
+		"issuerId": 1,
+	  	"issuedDate": 1596820720,
+		"dueDate": 1596820720,
+		"totalRent": 10.0,
+	  	"comment": "novel"
+	}],
+	"employeeId": 5
+}'
+
+11. curl to return books
+curl --location --request PATCH 'http://localhost:8080/project/v1.0/library' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"issuedBooks": [{
+		"id": 6,
+		"bookId": 2,
+		"studentId": 2,
+		"issuerId": 1,
+	  	"issuedDate": 1596820720,
+		"dueDate": 1596820720,
+		"totalRent": 10.0,
+		"totalFine": 10.0,
+	  	"comment": "novel"
+	}],
+	"employeeId": 5
+}'
+
 
 
 
