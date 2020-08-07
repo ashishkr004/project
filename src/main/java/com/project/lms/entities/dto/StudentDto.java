@@ -16,4 +16,5 @@ public class StudentDto {
     private String name;
     private String address;
     private Long phoneNumber;
+    private Boolean isActive;
 }

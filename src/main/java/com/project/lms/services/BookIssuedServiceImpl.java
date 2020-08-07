@@ -39,8 +39,8 @@ public class BookIssuedServiceImpl implements BookIssuedService {
         Optional<Employee> employee = employeeRepository.findById(employeeId);
 
         if (employee.isPresent()) {
-            if (employee.get().getRole().getValue().equalsIgnoreCase(LibraryConstants.LIBRARIAN) ||
-                    employee.get().getRole().getValue().equalsIgnoreCase(LibraryConstants.ISSUER)) {
+            if (employee.get().getRole().equalsIgnoreCase(LibraryConstants.LIBRARIAN) ||
+                    employee.get().getRole().equalsIgnoreCase(LibraryConstants.ISSUER)) {
                 List<IssuedBook> issuedBookList = convertToIssueBookEntities(issuedBookDtoList, employee.get());
                 List<IssuedBook> issuedBooks = issuedBookRepository.saveAll(issuedBookList);
                 return convertToDto(issuedBooks);
@@ -67,8 +67,8 @@ public class BookIssuedServiceImpl implements BookIssuedService {
 
         Optional<Employee> employee = employeeRepository.findById(employeeId);
 
-        if(employee.get().getRole().getValue().equalsIgnoreCase(LibraryConstants.LIBRARIAN)
-                || employee.get().getRole().getValue().equalsIgnoreCase(LibraryConstants.RECEIVER)) {
+        if(employee.get().getRole().equalsIgnoreCase(LibraryConstants.LIBRARIAN)
+                || employee.get().getRole().equalsIgnoreCase(LibraryConstants.RECEIVER)) {
             List<IssuedBook> issuedBooks = new ArrayList<>();
 
             for (IssuedBookDto issuedBookDto : issuedBookDtos) {

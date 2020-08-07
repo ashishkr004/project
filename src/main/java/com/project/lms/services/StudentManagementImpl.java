@@ -1,8 +1,12 @@
 package com.project.lms.services;
 
+import com.project.lms.constants.LibraryConstants;
+import com.project.lms.entities.dao.Employee;
 import com.project.lms.entities.dao.Student;
 import com.project.lms.entities.dto.StudentDto;
 import com.project.lms.exceptions.EmployeeNotAddedException;
+import com.project.lms.exceptions.EmployeeRoleNotSatisfied;
+import com.project.lms.repositories.EmployeeRepository;
 import com.project.lms.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +19,23 @@ public class StudentManagementImpl implements StudentManagement {
     @Autowired
     private StudentRepository studentRepository;
 
-    @Override
-    public List<StudentDto> addStudents(List<StudentDto> studentDtoList) {
-        try {
-            List<Student> studentList = studentRepository.saveAll(convertToListOfStudents(studentDtoList));
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
-            return convertToListOfStudentDto(studentList);
+    @Override
+    public List<StudentDto> addStudents(List<StudentDto> studentDtoList, Long employeeId) {
+        try {
+
+            Optional<Employee> employee = employeeRepository.findById(employeeId);
+
+            if(employee.isPresent() && employee.get().getRole().equalsIgnoreCase(LibraryConstants.ADMIN)) {
+                List<Student> studentList = studentRepository.saveAll(convertToListOfStudents(studentDtoList));
+
+                return convertToListOfStudentDto(studentList);
+            }
+
+            throw new EmployeeRoleNotSatisfied("Not an valid employee");
+
         } catch (Exception e) {
             throw new EmployeeNotAddedException(e.getMessage());
         }
@@ -92,6 +107,7 @@ public class StudentManagementImpl implements StudentManagement {
                     .name(studentDto.getName())
                     .password(studentDto.getPassword())
                     .phoneNumber(studentDto.getPhoneNumber())
+                    .isActive(studentDto.getIsActive())
                     .build();
 
             studentList.add(student);

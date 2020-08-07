@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface EmployeeManagement {
 
-    List<EmployeeDto> addEmployees(List<EmployeeDto> employeeDtoList);
+    List<EmployeeDto> addEmployees(List<EmployeeDto> employeeDtoList, Long employeeId);
 
     List<EmployeeDto> searchEmployees(Set<Long> employeeIds, Set<String> employeeTypes, Set<String> names, Set<Long> phoneNumbers);
 

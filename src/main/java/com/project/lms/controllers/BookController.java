@@ -3,6 +3,7 @@ package com.project.lms.controllers;
 import com.project.lms.entities.dto.BookDto;
 import com.project.lms.entities.dto.ResponseDto;
 import com.project.lms.entities.dto.request.BooksRequestDto;
+import com.project.lms.exceptions.InvalidRequestException;
 import com.project.lms.services.BookInventoryManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,14 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<ResponseDto> addBooks(@RequestBody BooksRequestDto booksRequestDto) {
+
+        if(booksRequestDto.getEmployeeId() == null) {
+            throw new InvalidRequestException("EmployeeId cannot be null");
+        }
+
         return ResponseEntity.ok(
                 new ResponseDto("200", "Books added successfully",
-                        bookInventoryManagement.addBooks(booksRequestDto.getBooksList())));
+                        bookInventoryManagement.addBooks(booksRequestDto.getBooksList(), booksRequestDto.getEmployeeId())));
     }
 
     @GetMapping

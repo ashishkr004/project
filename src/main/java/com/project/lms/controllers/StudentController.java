@@ -2,6 +2,8 @@ package com.project.lms.controllers;
 
 import com.project.lms.entities.dto.ResponseDto;
 import com.project.lms.entities.dto.StudentDto;
+import com.project.lms.entities.dto.request.StudentRequestDto;
+import com.project.lms.exceptions.InvalidRequestException;
 import com.project.lms.services.StudentManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,15 @@ public class StudentController {
     private StudentManagement studentManagement;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> addBooks(@RequestBody List<StudentDto> studentDtoList) {
+    public ResponseEntity<ResponseDto> addBooks(@RequestBody StudentRequestDto studentRequestDto) {
+
+        if(studentRequestDto.getEmployeeId() == null) {
+            throw new InvalidRequestException("EmployeeId cannot be null");
+        }
+
         return ResponseEntity.ok(
                 new ResponseDto("200", "Students added successfully",
-                        studentManagement.addStudents(studentDtoList)));
+                        studentManagement.addStudents(studentRequestDto.getStudentsList(), studentRequestDto.getEmployeeId())));
     }
 
     @GetMapping

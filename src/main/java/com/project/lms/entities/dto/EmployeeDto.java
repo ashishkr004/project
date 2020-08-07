@@ -17,4 +17,5 @@ public class EmployeeDto {
     private String address;
     private Long phoneNumber;
     private String role;
+    private Boolean isActive;
 }

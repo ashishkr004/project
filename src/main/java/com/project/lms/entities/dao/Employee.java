@@ -1,6 +1,5 @@
 package com.project.lms.entities.dao;
 
-import com.project.lms.entities.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +34,7 @@ public class Employee {
     private Long phoneNumber;
 
     @Column(name = "role", nullable = false)
-    private Role role;
+    private String role;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;

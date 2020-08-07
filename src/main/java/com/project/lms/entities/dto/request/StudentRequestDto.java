@@ -1,6 +1,8 @@
 package com.project.lms.entities.dto.request;
 
-import com.project.lms.entities.dto.BookDto;
+
+import com.project.lms.entities.dao.Student;
+import com.project.lms.entities.dto.StudentDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BooksRequestDto {
-    List<BookDto> booksList;
+public class StudentRequestDto {
+    List<StudentDto> studentsList;
     Long employeeId;
 }

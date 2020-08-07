@@ -1,9 +1,13 @@
 package com.project.lms.services;
 
+import com.project.lms.constants.LibraryConstants;
 import com.project.lms.entities.dao.Book;
+import com.project.lms.entities.dao.Employee;
 import com.project.lms.entities.dto.BookDto;
 import com.project.lms.exceptions.BooksNotAddedException;
+import com.project.lms.exceptions.EmployeeRoleNotSatisfied;
 import com.project.lms.repositories.BookRepository;
+import com.project.lms.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +19,23 @@ public class BookInventoryManagementImpl implements BookInventoryManagement {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     @Override
-    public List<BookDto> addBooks(List<BookDto> bookDtoList) {
+    public List<BookDto> addBooks(List<BookDto> bookDtoList, Long employeeId) {
 
         try {
-            List<Book> bookList = bookRepository.saveAll(convertToListOfBook(bookDtoList));
+            Optional<Employee> employee = employeeRepository.findById(employeeId);
 
-            return convertToListOfBookDto(bookList);
+            if(employee.isPresent() && employee.get().getRole().equalsIgnoreCase(LibraryConstants.LIBRARIAN)){
+                List<Book> bookList = bookRepository.saveAll(convertToListOfBook(bookDtoList));
+
+                return convertToListOfBookDto(bookList);
+            }
+
+            throw new EmployeeRoleNotSatisfied("Not an valid employee");
+
         } catch (Exception e) {
             throw new BooksNotAddedException(e.getMessage());
         }
@@ -118,6 +132,7 @@ public class BookInventoryManagementImpl implements BookInventoryManagement {
                     .subject(book.getSubject())
                     .title(book.getTitle())
                     .isIssued(book.getIsIssued())
+                    .isActive(book.getIsActive())
                     .build();
 
             bookDtoList.add(bookDto);

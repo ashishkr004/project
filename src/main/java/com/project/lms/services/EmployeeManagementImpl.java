@@ -1,8 +1,10 @@
 package com.project.lms.services;
 
+import com.project.lms.constants.LibraryConstants;
 import com.project.lms.entities.dao.Employee;
 import com.project.lms.entities.dto.EmployeeDto;
 import com.project.lms.exceptions.EmployeeNotAddedException;
+import com.project.lms.exceptions.EmployeeRoleNotSatisfied;
 import com.project.lms.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +15,20 @@ import java.util.*;
 public class EmployeeManagementImpl implements EmployeeManagement {
 
     @Autowired
-    EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository;
 
     @Override
-    public List<EmployeeDto> addEmployees(List<EmployeeDto> employeeDtoList) {
+    public List<EmployeeDto> addEmployees(List<EmployeeDto> employeeDtoList, Long employeeId) {
         try {
-            List<Employee> employeeList = employeeRepository.saveAll(convertToListOfEmployee(employeeDtoList));
+            Optional<Employee> employee = employeeRepository.findById(employeeId);
 
-            return convertToListOfEmployeeDto(employeeList);
+            if(employee.isPresent() && employee.get().getRole().equalsIgnoreCase(LibraryConstants.ADMIN)) {
+                List<Employee> employeeList = employeeRepository.saveAll(convertToListOfEmployee(employeeDtoList));
+
+                return convertToListOfEmployeeDto(employeeList);
+            }
+
+            throw new EmployeeRoleNotSatisfied("Not an valid employee");
         } catch (Exception e) {
             throw new EmployeeNotAddedException(e.getMessage());
         }
@@ -90,8 +98,9 @@ public class EmployeeManagementImpl implements EmployeeManagement {
                     .id(employeeDto.getId())
                     .name(employeeDto.getName())
                     .password(employeeDto.getPassword())
-//                    .role(Role.values(employeeDto.getRole())
+                    .role(employeeDto.getRole())
                     .phoneNumber(employeeDto.getPhoneNumber())
+                    .isActive(employeeDto.getIsActive() == null ? true : employeeDto.getIsActive())
                     .build();
 
             employeeList.add(employee);
@@ -111,8 +120,9 @@ public class EmployeeManagementImpl implements EmployeeManagement {
                     .id(employee.getId())
                     .name(employee.getName())
                     .password(employee.getPassword())
-//                    .role(Role.values(employeeDto.getRole())
+                    .role(employee.getRole())
                     .phoneNumber(employee.getPhoneNumber())
+                    .isActive(employee.getIsActive())
                     .build();
 
             employeeDtoList.add(employeeDto);

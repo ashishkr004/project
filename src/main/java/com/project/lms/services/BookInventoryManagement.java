@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface BookInventoryManagement {
-    List<BookDto> addBooks(List<BookDto> bookDtoList);
+    List<BookDto> addBooks(List<BookDto> bookDtoList, Long employeeId);
 
     List<BookDto> searchBooks(Set<Long> ids, Set<String> titles, Set<String> subjects,
                               Set<String> authors, Set<Boolean> isIssued);

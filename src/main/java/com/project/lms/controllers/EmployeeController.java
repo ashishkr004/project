@@ -1,13 +1,13 @@
 package com.project.lms.controllers;
 
-import com.project.lms.entities.dto.EmployeeDto;
 import com.project.lms.entities.dto.ResponseDto;
+import com.project.lms.entities.dto.request.EmployeesRequestDto;
+import com.project.lms.exceptions.InvalidRequestException;
 import com.project.lms.services.EmployeeManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @CrossOrigin
@@ -18,10 +18,15 @@ public class EmployeeController {
     private EmployeeManagement employeeManagement;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> addBooks(@RequestBody List<EmployeeDto> employeeDtoList) {
+    public ResponseEntity<ResponseDto> addBooks(@RequestBody EmployeesRequestDto employeesRequestDto) {
+
+        if(employeesRequestDto.getEmployeeId() == null) {
+            throw new InvalidRequestException("EmployeeId cannot be null");
+        }
+
         return ResponseEntity.ok(
                 new ResponseDto("200", "Employees added successfully",
-                        employeeManagement.addEmployees(employeeDtoList)));
+                        employeeManagement.addEmployees(employeesRequestDto.getEmployeesList(), employeesRequestDto.getEmployeeId())));
     }
 
     @GetMapping
