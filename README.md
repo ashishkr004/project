@@ -138,6 +138,32 @@ curl --location --request PATCH 'http://localhost:8080/project/v1.0/employees' \
 	"employeeId": 1
 }'
 
+9. update students curl api
+curl --location --request PATCH 'http://localhost:8080/project/v1.0/students' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"studentsList": [{
+		"id": 1,
+		"studentType": "College",
+		"password": "2345",
+		"name": "Ashok",
+	  	"address": "motihari",
+		"phoneNumber": "9912345679",
+		"role": "receiver",
+	  	"isActive": true
+	},
+	{
+            "id": 2,
+            "studentType": "school",
+            "password": "2345",
+            "name": "amit",
+            "address": "motihari",
+            "phoneNumber": 9912345679,
+            "isActive": true
+        }],
+	"employeeId": 1
+}'
+
 
 
 
