@@ -11,5 +11,5 @@ public interface BookInventoryManagement {
     List<BookDto> searchBooks(Set<Long> ids, Set<String> titles, Set<String> subjects,
                               Set<String> authors, Set<Boolean> isIssued);
 
-    Boolean updateBooks(Set<Long> ids);
+    List<BookDto> updateBooks(List<BookDto> bookDtoList, Long employeeId);
 }

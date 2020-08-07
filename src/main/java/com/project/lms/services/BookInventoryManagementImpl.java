@@ -28,7 +28,7 @@ public class BookInventoryManagementImpl implements BookInventoryManagement {
         try {
             Optional<Employee> employee = employeeRepository.findById(employeeId);
 
-            if(employee.isPresent() && employee.get().getRole().equalsIgnoreCase(LibraryConstants.LIBRARIAN)){
+            if (employee.isPresent() && employee.get().getRole().equalsIgnoreCase(LibraryConstants.LIBRARIAN)) {
                 List<Book> bookList = bookRepository.saveAll(convertToListOfBook(bookDtoList));
 
                 return convertToListOfBookDto(bookList);
@@ -52,18 +52,42 @@ public class BookInventoryManagementImpl implements BookInventoryManagement {
     }
 
     @Override
-    public Boolean updateBooks(Set<Long> ids) {
-        List<BookDto> bookDtoList = searchBooks(ids, null, null, null, null);
+    public List<BookDto> updateBooks(List<BookDto> bookDtoList, Long employeeId) {
 
-        List<Book> books = convertToListOfBook(bookDtoList);
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
 
-        for (Book book : books) {
-            book.setIsActive(false);
+        if (employee.isPresent() &&
+                (employee.get().getRole().equalsIgnoreCase(LibraryConstants.LIBRARIAN)
+                        || (employee.get().getRole().equalsIgnoreCase(LibraryConstants.ISSUER))
+                        || (employee.get().getRole().equalsIgnoreCase(LibraryConstants.RECEIVER)))) {
+
+            Set<Long> ids = new HashSet<>();
+
+            HashMap<Long, BookDto> bookDtoHashMap = new HashMap<>();
+
+            for (BookDto bookDto : bookDtoList) {
+                ids.add(bookDto.getId());
+                bookDtoHashMap.put(bookDto.getId(), bookDto);
+            }
+
+            List<Book> books = bookRepository.findAllById(ids);
+
+            for (Book book : books) {
+                BookDto bookDto = bookDtoHashMap.get(book.getId());
+
+                book.setIsIssued(bookDto.getIsIssued() == null ? book.getIsActive() : bookDto.getIsIssued());
+                book.setIsActive(bookDto.getIsActive() == null ? book.getIsActive() : bookDto.getIsActive());
+                book.setAuthor(bookDto.getAuthor() == null ? book.getAuthor() : bookDto.getAuthor());
+                book.setSubject(bookDto.getSubject() == null ? book.getSubject() : bookDto.getSubject());
+                book.setTitle(bookDto.getTitle() == null ? book.getTitle() : bookDto.getTitle());
+            }
+
+            List<Book> updatedBooks = bookRepository.saveAll(books);
+
+            return convertToListOfBookDto(updatedBooks);
         }
 
-        bookRepository.saveAll(books);
-
-        return true;
+        throw new EmployeeRoleNotSatisfied("Not an valid employee");
     }
 
     private Set<Long> getIds(Set<Long> ids) {

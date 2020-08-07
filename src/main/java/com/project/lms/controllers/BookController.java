@@ -45,9 +45,14 @@ public class BookController {
     }
 
     @PatchMapping
-    public ResponseEntity<ResponseDto> updateBooks(@RequestParam(value = "ids", required = false) Set<Long> ids) {
+    public ResponseEntity<ResponseDto> updateBooks(@RequestBody BooksRequestDto booksRequestDto) {
+
+        if(booksRequestDto.getEmployeeId() == null) {
+            throw new InvalidRequestException("EmployeeId cannot be null");
+        }
+
         return ResponseEntity.ok(
                 new ResponseDto("200", "Books deleted successfully",
-                        bookInventoryManagement.updateBooks(ids)));
+                        bookInventoryManagement.updateBooks(booksRequestDto.getBooksList(), booksRequestDto.getEmployeeId())));
     }
 }
