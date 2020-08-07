@@ -1,7 +1,9 @@
 package com.project.lms.services;
 
 import com.project.lms.constants.LibraryConstants;
+import com.project.lms.entities.dao.Book;
 import com.project.lms.entities.dao.Employee;
+import com.project.lms.entities.dto.BookDto;
 import com.project.lms.entities.dto.EmployeeDto;
 import com.project.lms.exceptions.EmployeeNotAddedException;
 import com.project.lms.exceptions.EmployeeRoleNotSatisfied;
@@ -45,18 +47,30 @@ public class EmployeeManagementImpl implements EmployeeManagement {
     }
 
     @Override
-    public Boolean deleteEmployees(Set<Long> employeeIds, Set<Long> phoneNumbers) {
-        List<EmployeeDto> employeeDtoList = searchEmployees(employeeIds, null, null, phoneNumbers);
+    public List<EmployeeDto> updateEmployees(List<EmployeeDto> employeeDtoList, Long employeeId) {
 
-        List<Employee> employeeList = convertToListOfEmployee(employeeDtoList);
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
 
-        for (Employee employee : employeeList) {
-            employee.setIsActive(false);
+        if (employee.isPresent() && employee.get().getRole().equalsIgnoreCase(LibraryConstants.ADMIN)) {
+
+            Set<Long> ids = new HashSet<>();
+
+            HashMap<Long, EmployeeDto> employeeDtoHashMap = new HashMap<>();
+
+            for (EmployeeDto employeeDto : employeeDtoList) {
+                ids.add(employeeDto.getId());
+                employeeDtoHashMap.put(employeeDto.getId(), employeeDto);
+            }
+
+            List<Employee> employees = employeeRepository.findAllById(ids);
+            employees = updateFetchedEmployees(employees, employeeDtoHashMap);
+
+            List<Employee> updatedEmployees = employeeRepository.saveAll(employees);
+
+            return convertToListOfEmployeeDto(updatedEmployees);
         }
 
-        employeeRepository.saveAll(employeeList);
-
-        return true;
+        throw new EmployeeRoleNotSatisfied("Not an valid employee");
     }
 
     private Set<Long> getEmployeeIds(Set<Long> employeeIds) {
@@ -129,5 +143,21 @@ public class EmployeeManagementImpl implements EmployeeManagement {
         }
 
         return employeeDtoList;
+    }
+
+    private List<Employee> updateFetchedEmployees(List<Employee> employees, HashMap<Long, EmployeeDto> employeeDtoHashMap) {
+        for (Employee employee1 : employees) {
+            EmployeeDto employeeDto = employeeDtoHashMap.get(employee1.getId());
+
+            employee1.setAddress(employeeDto.getAddress() == null ? employee1.getAddress() : employeeDto.getAddress());
+            employee1.setIsActive(employeeDto.getIsActive() == null ? employee1.getIsActive() : employeeDto.getIsActive());
+            employee1.setEmployeeType(employeeDto.getEmployeeType() == null ? employee1.getEmployeeType() : employeeDto.getEmployeeType());
+            employee1.setName(employeeDto.getName() == null ? employee1.getName() : employeeDto.getName());
+            employee1.setPassword(employeeDto.getPassword() == null ? employee1.getPassword() : employeeDto.getPassword());
+            employee1.setRole(employeeDto.getRole() == null ? employee1.getRole() : employeeDto.getRole());
+            employee1.setPhoneNumber(employeeDto.getPhoneNumber() == null ? employee1.getPhoneNumber() : employeeDto.getPhoneNumber());
+        }
+
+        return employees;
     }
 }

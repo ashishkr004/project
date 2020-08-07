@@ -11,5 +11,5 @@ public interface EmployeeManagement {
 
     List<EmployeeDto> searchEmployees(Set<Long> employeeIds, Set<String> employeeTypes, Set<String> names, Set<Long> phoneNumbers);
 
-    Boolean deleteEmployees(Set<Long> employeeIds, Set<Long> phoneNumbers);
+    List<EmployeeDto> updateEmployees(List<EmployeeDto> employeeDtoList, Long employeeId);
 }

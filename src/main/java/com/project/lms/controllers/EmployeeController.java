@@ -40,10 +40,14 @@ public class EmployeeController {
     }
 
     @PatchMapping
-    public ResponseEntity<ResponseDto> updateEmployees(@RequestParam(value = "ids", required = false) Set<Long> employeeIds,
-                                                      @RequestParam(value = "phoneNumbers", required = false) Set<Long> phoneNumbers) {
+    public ResponseEntity<ResponseDto> updateEmployees(@RequestBody EmployeesRequestDto employeesRequestDto) {
+
+        if (employeesRequestDto.getEmployeeId() == null) {
+            throw new InvalidRequestException("EmployeeId cannot be null");
+        }
+
         return ResponseEntity.ok(
-                new ResponseDto("200", "Employees deleted successfully",
-                        employeeManagement.deleteEmployees(employeeIds, phoneNumbers)));
+                new ResponseDto("200", "Employees updated successfully",
+                        employeeManagement.updateEmployees(employeesRequestDto.getEmployeesList(), employeesRequestDto.getEmployeeId())));
     }
 }

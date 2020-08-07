@@ -71,16 +71,7 @@ public class BookInventoryManagementImpl implements BookInventoryManagement {
             }
 
             List<Book> books = bookRepository.findAllById(ids);
-
-            for (Book book : books) {
-                BookDto bookDto = bookDtoHashMap.get(book.getId());
-
-                book.setIsIssued(bookDto.getIsIssued() == null ? book.getIsActive() : bookDto.getIsIssued());
-                book.setIsActive(bookDto.getIsActive() == null ? book.getIsActive() : bookDto.getIsActive());
-                book.setAuthor(bookDto.getAuthor() == null ? book.getAuthor() : bookDto.getAuthor());
-                book.setSubject(bookDto.getSubject() == null ? book.getSubject() : bookDto.getSubject());
-                book.setTitle(bookDto.getTitle() == null ? book.getTitle() : bookDto.getTitle());
-            }
+            books = updateFetchedBooks(books, bookDtoHashMap);
 
             List<Book> updatedBooks = bookRepository.saveAll(books);
 
@@ -163,5 +154,19 @@ public class BookInventoryManagementImpl implements BookInventoryManagement {
         }
 
         return bookDtoList;
+    }
+
+    private List<Book> updateFetchedBooks(List<Book> books, HashMap<Long, BookDto> bookDtoHashMap) {
+        for (Book book : books) {
+            BookDto bookDto = bookDtoHashMap.get(book.getId());
+
+            book.setIsIssued(bookDto.getIsIssued() == null ? book.getIsActive() : bookDto.getIsIssued());
+            book.setIsActive(bookDto.getIsActive() == null ? book.getIsActive() : bookDto.getIsActive());
+            book.setAuthor(bookDto.getAuthor() == null ? book.getAuthor() : bookDto.getAuthor());
+            book.setSubject(bookDto.getSubject() == null ? book.getSubject() : bookDto.getSubject());
+            book.setTitle(bookDto.getTitle() == null ? book.getTitle() : bookDto.getTitle());
+        }
+
+        return books;
     }
 }
