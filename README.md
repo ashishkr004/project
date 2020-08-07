@@ -214,6 +214,9 @@ curl --location --request PATCH 'http://localhost:8080/project/v1.0/library' \
 	"employeeId": 5
 }'
 
+13. curl to search issued books details
+curl --location --request GET 'http://localhost:8080/project/v1.0/library'
+
 
 ### Missed
 # Junit for testing
